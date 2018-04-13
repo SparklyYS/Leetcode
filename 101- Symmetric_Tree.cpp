@@ -24,35 +24,22 @@ class Solution {
 public:
     bool isSymmetric(TreeNode* root) 
     {
-        queue<TreeNode*> lq;
-        queue<TreeNode*> rq;
-
         if (!root)
             return true;
         
-        lq.push(root->left);
-        rq.push(root->right);
+        return dfs(root->left, root->right);
+    }
 
-        while (!lq.empty() && !rq.empty())
-        {
-            TreeNode* lnode = lq.front();
-            lq.pop();
-            TreeNode* rnode = rq.front();
-            rq.pop();
+    bool dfs(TreeNode* lnode, TreeNode* rnode)
+    {
+        if (lnode == NULL && rnode == NULL)
+            return true;
+        if (lnode == NULL || rnode == NULL)
+            return false;
+        if (lnode->val != rnode->val)
+            return false;
 
-            if (lnode == NULL && rnode == NULL)
-                continue;
-            if (lnode == NULL || rnode == NULL)
-                return false;
-            if (lnode->val != rnode->val)
-                return false;
-            
-            lq.push(lnode->left);
-            rq.push(rnode->right);
-            lq.push(lnode->right);
-            rq.push(rnode->left);
-        }
-
-        return true;
+        bool flag = (dfs(lnode->left, rnode->right) && dfs(lnode->right, rnode->left));
+        return flag;        
     }
 };
