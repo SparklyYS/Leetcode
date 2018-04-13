@@ -14,40 +14,44 @@ class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) 
     {
-        set<vector<int>> s;
         vector<vector<int>> res;
-        
-        if (nums.size() < 3)
-            return res;
 
         sort(nums.begin(), nums.end());
-       
-        for (int i = 0; i < nums.size()-2; i++)
+        
+        for (int i = 0; i < nums.size(); i++)
         {
-            for (int j = i+1; j < nums.size()-1; j++)
-            {
-                if (nums[i] + nums[j] > 0)
-                    break;
+            int target = -nums[i];
+            int front = i+1;
+            int rear = nums.size()-1;
 
-                int target = 0 - (nums[i] + nums[j]);
-                if (binary_search(nums.begin()+j+1, nums.end(), target))
+            while (front < rear)
+            {
+                int sum = nums[front] + nums[rear];
+                
+                if (sum < target)
+                    front++;
+                else if (sum > target)
+                    rear--;
+                else
                 {
                     vector<int> tmp;
                     tmp.push_back(nums[i]);
-                    tmp.push_back(nums[j]);
-                    tmp.push_back(target);
-                    sort(tmp.begin(), tmp.end());
-                    s.insert(tmp);
+                    tmp.push_back(nums[front]);
+                    tmp.push_back(nums[rear]);
+                    res.push_back(tmp);
+
+                    while (front < rear && nums[front] == tmp[1])
+                        front++;
+                    
+                    while (front < rear && nums[rear] == tmp[2])
+                        rear--;
                 }
             }
 
-            if (nums[i] > 0)
-                break;
+            while ((i+1) < nums.size() && nums[i+1] == nums[i])
+                i++;
         }
-        
-        for (auto ele : s)
-            res.push_back(ele);
-    
+
         return res;
     }
 };
